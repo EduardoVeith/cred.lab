@@ -11,3 +11,4 @@ if (!admin.apps.length) {
 }
 
 export const firestore = admin.firestore();
+console.log("Private Key:", process.env.FIREBASE_PRIVATE_KEY);

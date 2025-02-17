@@ -14,6 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Preencha todos os campos obrigatórios' });
   }
 
+
   // Verificação de formato dos campos
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
