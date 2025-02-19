@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
   const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
-  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
   if (!emailRegex.test(email)) {
     return res.status(400).json({ error: 'Formato de e-mail inválido.' });
