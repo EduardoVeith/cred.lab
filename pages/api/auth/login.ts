@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { auth } from '../../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import jwt from 'jsonwebtoken';
-// testw
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
