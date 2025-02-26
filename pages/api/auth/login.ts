@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { auth } from '../../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import jwt from 'jsonwebtoken';
-// trste
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
