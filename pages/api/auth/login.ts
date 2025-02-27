@@ -58,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
       return res.status(401).json({ error: 'Credenciais inválidas. Verifique seu e-mail e senha.' });
     }
-
+    // Tratamento de erro ao fazer login
     console.error(`Erro no login: ${error.message} - Email recebido: ${email}`);
     return res.status(500).json({ error: 'Ocorreu um erro ao tentar fazer login. Tente novamente mais tarde.' });
   }
