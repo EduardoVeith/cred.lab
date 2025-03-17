@@ -37,6 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Formato de data inválido. Use YYYY-MM-DD.' });
   }
 
+  // Verificação de números repetidos consecutivamente
+  const repeatedNumbersRegex = /(\d)\1{1,}/; // Captura qualquer número repetido consecutivamente
+  if (repeatedNumbersRegex.test(password)) {
+    return res.status(400).json({ error: 'A senha não pode conter números repetidos consecutivamente.' });
+  }
+
   // Validação de idade mínima
   const birthDateObj = new Date(birthDate);
   const today = new Date();
