@@ -105,7 +105,7 @@ export default function Login() {
           <div className={styles.divider}></div>
 
           <p className={styles['text-center']}>
-            Ainda não tem uma conta? <a href="/cadastro">Cadastre-se</a>
+            Ainda não tem uma conta? <a href="/register">Cadastre-se</a>
           </p>
         </form>
       </div>
