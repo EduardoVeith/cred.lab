@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import styles from '../styles/login.module.scss';
+import styles from '../styles/register.module.scss';
 import { FiUser, FiLock } from 'react-icons/fi';
 
 export default function Cadastro() {
@@ -53,7 +53,7 @@ export default function Cadastro() {
             <div className={styles.barra_tanc}>TANC</div>
             <div className={styles.page}>
                 <form onSubmit={handleSubmit} className={styles.container}>
-                    <h2 className={styles['container-title']}>Cadastro</h2>
+                    <h2 className={styles['container-title']}>Criar uma conta:</h2>
 
                     <div className={styles['container-inputs']}>
                         {[
