@@ -1,21 +1,23 @@
 .dashboardContainer {
   font-family: Arial, sans-serif;
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .barraTanc {
   background-color: #1225f8;
-  color: white;
-  padding: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 2rem;
+  color: #ffffff;
+  padding: 10px 18px;
+  font-size: 40px;
+  font-weight: 700;
   width: 100%;
-  text-align: left
-}
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-family: "Inter", sans-serif;
+}   
 
 .header {
   display: flex;
