@@ -63,7 +63,7 @@
     border: none;
     background: none;
     outline: none;
-    font-size: 14px;
+    font-size: 16px; // 👈 obrigatório para evitar zoom no iOS
     font-family: "Inter", sans-serif;
   }
 

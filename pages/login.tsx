@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import styles from '../styles/login.module.scss';
 import { FiUser, FiLock } from 'react-icons/fi';
 
@@ -10,7 +11,6 @@ export default function Login() {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Redireciona se já estiver logado
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) router.push('/dashboard');
@@ -21,22 +21,22 @@ export default function Login() {
     setLoading(true);
     setErrorMsg('');
 
-    // Limpar espaços
+    // limpando espaços em branco
     const cleanEmail = email.trim();
     const cleanPassword = password.trim();
 
-    // Validações básicas no front
     if (!cleanEmail.includes('@')) {
       setErrorMsg('Digite um e-mail válido.');
       setLoading(false);
       return;
     }
 
-    if (cleanPassword.length < 8) {
-      setErrorMsg('A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, um número e um caractere especial.');
+    if (cleanPassword === '') {
+      setErrorMsg('Digite a senha.');
       setLoading(false);
       return;
     }
+    
 
     try {
       const res = await fetch('/api/auth/login', {
@@ -47,13 +47,18 @@ export default function Login() {
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || 'Erro ao fazer login');
+      if (!res.ok) {
+        setErrorMsg(data.error || 'Erro ao fazer login');
+        setLoading(false);
+        return;
+      }
 
       localStorage.setItem('token', data.token);
       localStorage.setItem('email', data.email);
       router.push('/dashboard');
     } catch (err: any) {
-      setErrorMsg(err.message);
+      console.error('Erro inesperado no login:', err);
+      setErrorMsg('Erro inesperado. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -105,7 +110,7 @@ export default function Login() {
           <div className={styles.divider}></div>
 
           <p className={styles['text-center']}>
-            Ainda não tem uma conta? <a href="/register">Cadastre-se</a>
+            Ainda não tem uma conta? <Link href="/register">Cadastre-se</Link>
           </p>
         </form>
       </div>
