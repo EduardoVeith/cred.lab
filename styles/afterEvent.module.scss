@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+/* afterEvent.module.scss */
+/* ============ BARRA TANC ============ */
+.barraTanc {
+    background-color: #1225f8;
+    color: #ffffff;
+    padding: 1px 18px;
+    font-size: 40px;
+    font-weight: 700;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: "Inter", sans-serif;
+  
+    h1 {
+      margin: 0;
+      line-height: 1;
+    }
+  }
+  
+  /* ... (restante do seu SCSS existente) ... */
+
+  
+  /* ============ CONTAINER PRINCIPAL ============ */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 20px 20px; /* 80px top para a barra fixa */
+    font-family: "Inter", sans-serif;
+  }
+  
+  /* ============ SEÇÃO DO EVENTO ============ */
+  .eventInfo {
+    margin-bottom: 30px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  
+    h2 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+  
+    .eventName {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+  
+    .eventDetails {
+      p {
+        margin: 8px 0;
+        color: #666;
+        font-size: 16px;
+  
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+  
+  /* ============ BOTÕES ============ */
+  .buttonGroup {
+    display: flex;
+    gap: 15px;
+    margin: 25px 0;
+    flex-wrap: wrap;
+  
+    .button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: "Inter", sans-serif;
+  
+      &:first-child {
+        background-color: #1225f8;
+        color: white;
+  
+        &:hover {
+          background-color: #0e1ecf;
+          transform: translateY(-2px);
+        }
+      }
+  
+      &:not(:first-child) {
+        background-color: #f0f0f0;
+        color: #333;
+  
+        &:hover {
+          background-color: #e0e0e0;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+  
+  /* ============ TABELA ============ */
+  .credenciados {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  
+    h3 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+  
+    .tableHeader {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 12px 15px;
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+  
+    .tableRow {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+      color: #555;
+  
+      &:last-child {
+        border-bottom: none;
+      }
+  
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+  }
+  
+  /* ============ RODAPÉ ============ */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #777;
+    font-size: 14px;
+    padding: 20px 0;
+  }
