@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { firestore } from '../../../services/firebaseAdmin';
+import EventData from '../../../components/types/interfaceEventData';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -37,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Desestrutura os campos enviados no corpo da requisição
-    const { title, imageUrl, category, startDate, endDate, description, address, guests } = req.body;
+    const { title, imageUrl, category, startDate, endDate, description, address, guests }: EventData = req.body;
 
     // Verifica os campos obrigatórios
     if (!title || !category || !startDate || !endDate || !description || !address) {
