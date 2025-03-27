@@ -19,7 +19,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
         setAuthenticated(true);
       } else {
         setAuthenticated(false);
-        router.push('/login'); // 🔁 redirecionar para a tela de login
+        router.push('/login');  // usuario nao autenticado, redireciona para a pagina de login
       }
       setLoading(false);
     });

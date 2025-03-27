@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import admin from '../../../services/firebaseAdmin'; // usa a config do firebaseAdmin.ts
+import admin from '../../../services/firebaseAdmin'; 
 
 const db = admin.firestore();
 

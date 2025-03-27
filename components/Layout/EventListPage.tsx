@@ -9,6 +9,7 @@ interface Evento {
   id: string;
   title: string;
   locationName: string;
+  startDate: string;
 }
 
 export default function EventListPage() {
@@ -83,11 +84,12 @@ export default function EventListPage() {
 
         <div className={styles.eventsGrid}>
           {eventosPaginados.map((evento) => (
-            <CardEvento
-              key={evento.id}
-              nome={evento.title}
-              endereco={evento.locationName}
-            />
+           <CardEvento
+           key={evento.id}
+           nome={evento.title}
+           endereco={evento.locationName}
+           dataHora={evento.startDate}
+         />
           ))}
         </div>
 
