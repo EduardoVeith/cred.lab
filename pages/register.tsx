@@ -30,7 +30,7 @@ export default function Cadastro() {
   // Impede acesso se já estiver logado
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) router.push('/dashboard');
+    if (token) router.push('/eventList');
   }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

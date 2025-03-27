@@ -1,0 +1,125 @@
+.dashboardContainer {
+  font-family: Arial, sans-serif;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px; // top/bottom 20px, laterais 16px
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+  
+  .barraTanc {
+    background-color: #1225f8;
+    color: #ffffff;
+    padding: 10px 18px;
+    font-size: 40px;
+    font-weight: 700;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: "Inter", sans-serif;
+  }   
+  
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+  }
+  
+  .profileIcon {
+    font-size: 2rem;
+    color: #2c3e50;
+    cursor: pointer;
+  }
+  
+  .topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .filterIcon {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .promoteButton {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    
+    &:hover {
+      background-color: darken(#2c3e50, 10%);
+    }
+  }
+  
+  .eventsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 1024px) {
+    .eventsGrid {
+      grid-template-columns: repeat(2, 1fr); // tablets
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .eventsGrid {
+      grid-template-columns: 1fr; // celular
+    }
+  }
+  
+  
+  
+  .eventCard {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    
+    strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    
+    p {
+      color: #666;
+      margin: 0;
+    }
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    
+    button {
+      background: #f0f0f0;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      
+      &:hover {
+        background: #ddd;
+      }
+    }
+    
+    span {
+      margin: 0 1rem;
+    }
+  }
+  

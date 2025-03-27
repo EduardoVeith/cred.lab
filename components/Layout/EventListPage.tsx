@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react';
-import CardEvento from '../components/Layout/CardEvento';
+import CardEvento from '../../components/Layout/CardEvento';
 import styles from '../styles/Home.module.scss';
-import { FiFilter } from 'react-icons/fi';
+import { FiUser, FiFilter } from 'react-icons/fi';
 import { getAuth } from 'firebase/auth';
-import firebaseApp from '../services/firebase';
-import AuthGuard from '../components/Auth/AuthGuard';
+import firebaseApp from '../../services/firebase';
 
 interface Evento {
   id: string;
   title: string;
   locationName: string;
-  startDate: string;
-  endDate: string;
 }
 
-function EventListPage() {
+export default function EventListPage() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [paginaAtual, setPaginaAtual] = useState(1);
   const eventosPorPagina = 12;
@@ -49,21 +46,11 @@ function EventListPage() {
         }
 
         const data = await res.json();
-
-        const hoje = new Date();
-
-        const eventosFormatados = data
-          .filter((evento: any) => {
-            const fim = new Date(evento.endDate);
-            return fim >= hoje;
-          })
-          .map((evento: any) => ({
-            id: evento.id,
-            title: evento.title || 'indisponível',
-            locationName: evento.address?.locationName || 'indisponível',
-            startDate: evento.startDate || '',
-            endDate: evento.endDate || '',
-          }));
+        const eventosFormatados = data.map((evento: any) => ({
+          id: evento.id,
+          title: evento.title || 'indisponível',
+          locationName: evento.address?.city || 'indisponível',
+        }));
 
         setEventos(eventosFormatados);
       } catch (error) {
@@ -85,6 +72,10 @@ function EventListPage() {
       <div className={styles.barraTanc}>TANC</div>
 
       <div style={{ marginTop: '80px' }}>
+        <div className={styles.header}>
+          <FiUser className={styles.profileIcon} />
+        </div>
+
         <div className={styles.topBar}>
           <FiFilter className={styles.filterIcon} />
           <button className={styles.promoteButton}>Promover Evento</button>
@@ -96,7 +87,6 @@ function EventListPage() {
               key={evento.id}
               nome={evento.title}
               endereco={evento.locationName}
-              dataHora={evento.startDate}
             />
           ))}
         </div>
@@ -129,13 +119,5 @@ function EventListPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function ProtectedEventList() {
-  return (
-    <AuthGuard>
-      <EventListPage />
-    </AuthGuard>
   );
 }

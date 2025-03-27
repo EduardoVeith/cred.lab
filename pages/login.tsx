@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from '../styles/login.module.scss';
 import { FiUser, FiLock } from 'react-icons/fi';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import firebaseApp from '../services/firebase';
 
 export default function Login() {
   const router = useRouter();
@@ -12,8 +14,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) router.push('/dashboard');
+    const auth = getAuth(firebaseApp);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push('/eventList'); // redireciona se já estiver logado
+      }
+    });
+    return () => unsubscribe();
   }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -21,7 +28,6 @@ export default function Login() {
     setLoading(true);
     setErrorMsg('');
 
-    // limpando espaços em branco
     const cleanEmail = email.trim();
     const cleanPassword = password.trim();
 
@@ -36,29 +42,22 @@ export default function Login() {
       setLoading(false);
       return;
     }
-    
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: cleanEmail, password: cleanPassword }),
-      });
+      const auth = getAuth(firebaseApp);
+      await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setErrorMsg(data.error || 'Erro ao fazer login');
-        setLoading(false);
-        return;
-      }
-
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('email', data.email);
-      router.push('/dashboard');
+      // Firebase já mantém o usuário logado automaticamente
+      router.push('/eventList');
     } catch (err: any) {
-      console.error('Erro inesperado no login:', err);
-      setErrorMsg('Erro inesperado. Tente novamente.');
+      console.error('Erro no login Firebase:', err);
+      if (err.code === 'auth/user-not-found') {
+        setErrorMsg('Usuário não encontrado.');
+      } else if (err.code === 'auth/wrong-password') {
+        setErrorMsg('Senha incorreta.');
+      } else {
+        setErrorMsg('Erro ao fazer login. Tente novamente.');
+      }
     } finally {
       setLoading(false);
     }
