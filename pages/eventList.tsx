@@ -87,7 +87,9 @@ function EventListPage() {
       <div style={{ marginTop: '80px' }}>
         <div className={styles.topBar}>
           <FiFilter className={styles.filterIcon} />
-          <button className={styles.promoteButton}>Promover Evento</button>
+          <button className={styles.promoteButton} onClick={()=>{
+            window.location.href = '/eventRegister';
+          }}>Promover Evento</button>
         </div>
 
         <div className={styles.eventsGrid}>

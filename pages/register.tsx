@@ -95,7 +95,7 @@ export default function Cadastro() {
       if (!response.ok) throw new Error(data.error || 'Erro ao cadastrar');
 
       setShowSuccess(true);
-      setTimeout(() => router.push('/login'), 2000);
+      setTimeout(() => router.push('/eventList'), 2000);
     } catch (error: any) {
       setErrorMsg(error.message);
     } finally {

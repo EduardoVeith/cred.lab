@@ -63,7 +63,17 @@ const CreateEvent = () => {
       setLoading(false);
     }
   };
+  return (
+    <h1>fodase</h1>
+  )
 
 };
 
-export default CreateEvent;
+
+export default function ProtectedCreateEvent(){
+  return (
+    <AuthGuard>
+      <CreateEvent />
+    </AuthGuard>
+  );
+}
