@@ -6,6 +6,7 @@ export default interface EventData {
     endDate: string;
     description: string;
     locationName: string;
+    time: string;
     street: string;
     number: string;
     cep: string;
