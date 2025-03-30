@@ -79,6 +79,20 @@
   }
 }
 
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 25px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+textarea.input-field {
+  min-height: 120px;
+  resize: none;
+}
+
 .date-time-container {
   display: flex;
   gap: 10px;

@@ -5,14 +5,16 @@ export default interface EventData {
     startDate: string
     endDate: string;
     description: string;
-    locationName: string;
     time: string;
-    street: string;
-    number: string;
-    cep: string;
-    neighborhood: string;
-    city: string;
-    state: string;
-    complement?: string;
     guests?: any[];
+    address: {
+        locationName: string;
+        street: string;
+        number: string;
+        cep: string;
+        neighborhood: string;
+        city: string;
+        state: string;
+        complement?: string;
+    };
   }

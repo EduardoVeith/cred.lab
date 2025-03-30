@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-/* afterEvent.module.scss */
-/* ============ BARRA TANC ============ */
 .barraTanc {
     background-color: #1225f8;
     color: #ffffff;
-    padding: 1px 18px;
+    padding: 10px 18px;
     font-size: 40px;
     font-weight: 700;
     width: 100%;
@@ -19,19 +17,14 @@
       line-height: 1;
     }
   }
-  
-  /* ... (restante do seu SCSS existente) ... */
 
-  
-  /* ============ CONTAINER PRINCIPAL ============ */
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 80px 20px 20px; /* 80px top para a barra fixa */
+    padding: 80px 20px 20px;
     font-family: "Inter", sans-serif;
   }
   
-  /* ============ SEÇÃO DO EVENTO ============ */
   .eventInfo {
     margin-bottom: 30px;
     background: #fff;
@@ -66,7 +59,6 @@
     }
   }
   
-  /* ============ BOTÕES ============ */
   .buttonGroup {
     display: flex;
     gap: 15px;
@@ -104,8 +96,7 @@
       }
     }
   }
-  
-  /* ============ TABELA ============ */
+
   .credenciados {
     background: #fff;
     border-radius: 8px;
@@ -147,8 +138,7 @@
       }
     }
   }
-  
-  /* ============ RODAPÉ ============ */
+
   .footer {
     text-align: center;
     margin-top: 40px;

@@ -14,13 +14,15 @@ const CreateEvent = () => {
     time: '',
     endDate: '',
     description: '',
-    locationName: '',
-    street: '',
-    number: '',
-    cep: '',
-    neighborhood: '',
-    city: '',
-    state: '',
+    address: {
+      locationName: '',
+      street: '',
+      number: '',
+      cep: '',
+      neighborhood: '',
+      city: '',
+      state: '',
+    },
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,6 +30,13 @@ const CreateEvent = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeAddress = (e) => {
+    setFormData({
+      ...formData,
+      address: { ...formData.address, [e.target.name]: e.target.value },
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -80,6 +89,7 @@ const CreateEvent = () => {
             name="title"
             value={formData.title}
             onChange={handleChange}
+            required
           />
         </div>
       
@@ -90,16 +100,19 @@ const CreateEvent = () => {
             name="category"
             value={formData.category}
             onChange={handleChange}
+            required
           />
         </div>
 
         <div className={styles['input-group']}>
           <label>Descrição</label>
-          <textarea
+          <input
+            type="description"
             name="description"
             value={formData.description}
-            onChange={handleChange}
-          />
+            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            required
+            />
         </div>
 
         <div className={styles['input-group']}>
@@ -107,8 +120,9 @@ const CreateEvent = () => {
           <input
             type="text"
             name="locationName"
-            value={formData.locationName}
-            onChange={handleChange}
+            value={formData.address.locationName}
+            onChange={handleChangeAddress}
+            required
           />
         </div>
 
@@ -117,8 +131,9 @@ const CreateEvent = () => {
           <input
             type="text"
             name="street"
-            value={formData.street}
-            onChange={handleChange}
+            value={formData.address.street}
+            onChange={handleChangeAddress}
+            required
           />
         </div>
 
@@ -127,8 +142,9 @@ const CreateEvent = () => {
           <input
             type="text"
             name="number"
-            value={formData.number}
-            onChange={handleChange}
+            value={formData.address.number}
+            onChange={handleChangeAddress}
+            required
           />
         </div>
 
@@ -137,8 +153,9 @@ const CreateEvent = () => {
           <input
             type="text"
             name="cep"
-            value={formData.cep}
-            onChange={handleChange}
+            value={formData.address.cep}
+            onChange={handleChangeAddress}
+            required
           />
         </div>  
 
@@ -147,8 +164,9 @@ const CreateEvent = () => {
           <input
             type="text"
             name="neighborhood"
-            value={formData.neighborhood}
-            onChange={handleChange}
+            value={formData.address.neighborhood}
+            onChange={handleChangeAddress}
+            required
           />
         </div>  
 
@@ -157,8 +175,9 @@ const CreateEvent = () => {
           <input
             type="text"
             name="city"
-            value={formData.city}
-            onChange={handleChange}
+            value={formData.address.city}
+            onChange={handleChangeAddress}
+            required
           />
         </div>
 
@@ -167,8 +186,9 @@ const CreateEvent = () => {
           <input
             type="text"
             name="state"
-            value={formData.state}
-            onChange={handleChange}
+            value={formData.address.state}
+            onChange={handleChangeAddress}
+            required
           />
         </div>
 
@@ -179,6 +199,7 @@ const CreateEvent = () => {
             name="startDate"
             value={formData.startDate}
             onChange={handleChange}
+            required
           />
         </div>
 
@@ -189,16 +210,26 @@ const CreateEvent = () => {
             name="endDate"
             value={formData.endDate}
             onChange={handleChange}
+            required
           />
         </div>
 
-        <button
-          type="submit"
-          className={styles['button-login']}
-          disabled={loading}
-        >
-          {loading ? 'Carregando...' : 'Criar Evento'}
-        </button>
+        <div className={styles['input-group']}>
+          <label>Horário</label>
+          <input
+            type="time"
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <button type="submit" className={styles['button-login']} disabled={loading}>
+            <span className={styles['button-login-text']}>
+            {loading ? <span className={styles.spinner}></span> : 'Criar Evento'}
+          </span>
+          </button>
       </form>
     </div>
   </div>
