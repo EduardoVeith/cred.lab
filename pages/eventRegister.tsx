@@ -54,7 +54,7 @@ const CreateEvent = () => {
 
     try {
       const token = await user.getIdToken();
-      const response = await fetch('/api/dashboard/createEvent', {
+      const response = await fetch('/api/dashboard/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
