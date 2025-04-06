@@ -199,6 +199,7 @@ const CreateEvent = () => {
             name="startDate"
             value={formData.startDate}
             onChange={handleChange}
+            min={new Date().toISOString().split('T')[0]}
             required
           />
         </div>
@@ -210,6 +211,7 @@ const CreateEvent = () => {
             name="endDate"
             value={formData.endDate}
             onChange={handleChange}
+            min={new Date().toISOString().split('T')[0]}
             required
           />
         </div>
