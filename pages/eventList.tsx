@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import CardEvento from '../components/Layout/CardEvento';
 import styles from '../styles/Home.module.scss';
 import { FiFilter } from 'react-icons/fi';
@@ -87,19 +88,27 @@ function EventListPage() {
       <div style={{ marginTop: '80px' }}>
         <div className={styles.topBar}>
           <FiFilter className={styles.filterIcon} />
-          <button className={styles.promoteButton} onClick={()=>{
-            window.location.href = '/eventRegister';
-          }}>Promover Evento</button>
+          <button
+            className={styles.promoteButton}
+            onClick={() => window.location.href = '/eventRegister'}
+          >
+            Promover Evento
+          </button>
         </div>
 
         <div className={styles.eventsGrid}>
           {eventosPaginados.map((evento) => (
-            <CardEvento
+            <Link
               key={evento.id}
-              nome={evento.title}
-              endereco={evento.locationName}
-              dataHora={evento.startDate}
-            />
+              href={`/eventDetail?id=${evento.id}`}
+              className={styles.cardWrapper}
+            >
+              <CardEvento
+                nome={evento.title}
+                endereco={evento.locationName}
+                dataHora={evento.startDate}
+              />
+            </Link>
           ))}
         </div>
 

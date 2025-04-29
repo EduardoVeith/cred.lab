@@ -1,94 +1,95 @@
-// pages/eventDetail.tsx
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { getAuth } from 'firebase/auth';
-import firebaseApp from '../services/firebase';
-import AuthGuard from '../components/Auth/AuthGuard';
-import styles from '../styles/EventDetail.module.scss'; // Crie ou ajuste conforme sua estrutura de estilos
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { getAuth } from 'firebase/auth'
+import firebaseApp from '../services/firebase'
+import AuthGuard from '../components/Auth/AuthGuard'
+import Link from 'next/link'
+import styles from '../styles/eventDetail.module.scss'
 
-// Define a interface do detalhamento do evento, baseada nos dados que você já utiliza
 interface EventDetail {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-    imageUrl?: string;
-    startDate: string;
-    endDate: string;
-    // Acrescente outros campos que eventualmente você utilize
+    id: string
+    title: string
+    description: string
+    category: string
+    imageUrl?: string
+    startDate: string
+    endDate: string
 }
 
-const EventDetailPage = () => {
-    const router = useRouter();
-    // Caso você opte por rota dinâmica, utilize router.query.id
-    // Aqui estamos esperando um parâmetro id na query, ex: /eventDetail?id=123
-    const { id } = router.query;
-
-    const [eventData, setEventData] = useState<EventDetail | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+function EventDetailPage() {
+    const { query, replace } = useRouter()
+    const id = Array.isArray(query.id) ? query.id[0] : query.id
+    const [eventData, setEventData] = useState<EventDetail | null>(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
 
     useEffect(() => {
-        if (!id) return; // Aguarda o id chegar
-        const fetchEventDetail = async () => {
-            const auth = getAuth(firebaseApp);
-            const user = auth.currentUser;
-            if (!user) {
-                setError('Usuário não autenticado.');
-                setLoading(false);
-                return;
-            }
-            try {
-                const token = await user.getIdToken();
-                const response = await fetch(`/api/dashboard/eventDetail?id=${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                if (!response.ok) {
-                    const errorMessage = await response.text();
-                    throw new Error(errorMessage);
+        if (!id) return
+            ; (async () => {
+                setLoading(true)
+                try {
+                    const auth = getAuth(firebaseApp)
+                    const user = auth.currentUser
+                    if (!user) throw new Error('Usuário não autenticado')
+                    const token = await user.getIdToken()
+                    const resp = await fetch(
+                        `/api/dashboard/eventDetail?id=${id}`,
+                        { headers: { Authorization: `Bearer ${token}` } }
+                    )
+                    if (!resp.ok) {
+                        if (resp.status === 404) return replace('/404')
+                        throw new Error(await resp.text())
+                    }
+                    setEventData(await resp.json())
+                } catch (e: any) {
+                    setError(e.message)
+                } finally {
+                    setLoading(false)
                 }
-                const data = await response.json();
-                setEventData(data);
-            } catch (err: any) {
-                setError(err.message || 'Erro ao buscar detalhes do evento');
-            } finally {
-                setLoading(false);
-            }
-        };
+            })()
+    }, [id, replace])
 
-        fetchEventDetail();
-    }, [id]);
-
-    if (loading) return <div>Carregando...</div>;
-    if (error) return <div>Erro: {error}</div>;
-    if (!eventData) return <div>Nenhum evento encontrado.</div>;
+    if (loading)
+        return <div className={styles.container}>Carregando…</div>
+    if (error)
+        return <div className={styles.container}>Erro: {error}</div>
+    if (!eventData)
+        return <div className={styles.container}>Nenhum evento encontrado.</div>
 
     return (
-        <div className={styles.eventDetailContainer}>
-            <header className={styles.header}>
+        <div className={styles.container}>
+            <div className={styles.barraTanc}>
                 <h1>{eventData.title}</h1>
-            </header>
-            <section className={styles.details}>
-                <p><strong>Descrição:</strong> {eventData.description}</p>
-                <p><strong>Categoria:</strong> {eventData.category}</p>
-                <p><strong>Início:</strong> {eventData.startDate}</p>
-                <p><strong>Término:</strong> {eventData.endDate}</p>
+            </div>
+            <div className={styles.eventInfo}>
+                <h2 className={styles.eventName}>{eventData.title}</h2>
+                <div className={styles.eventDetails}>
+                    <p><strong>Descrição:</strong> {eventData.description}</p>
+                    <p><strong>Categoria:</strong> {eventData.category}</p>
+                    <p><strong>Início:</strong> {new Date(eventData.startDate).toLocaleString('pt-BR')}</p>
+                    <p><strong>Término:</strong> {new Date(eventData.endDate).toLocaleString('pt-BR')}</p>
+                </div>
                 {eventData.imageUrl && (
-                    <div className={styles.imageContainer}>
-                        <img src={eventData.imageUrl} alt={eventData.title} />
-                    </div>
+                    <img
+                        src={eventData.imageUrl}
+                        alt={eventData.title}
+                        className={styles.eventImage}
+                    />
                 )}
-            </section>
+            </div>
+            <div className={styles.buttonGroup}>
+                <Link href="/eventList" className={styles.button}>
+                    Voltar para Lista
+                </Link>
+            </div>
         </div>
-    );
-};
+    )
+}
 
 export default function ProtectedEventDetail() {
     return (
         <AuthGuard>
             <EventDetailPage />
         </AuthGuard>
-    );
+    )
 }
