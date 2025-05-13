@@ -17,33 +17,23 @@
   top: 0;
   left: 0;
   font-family: "Inter", sans-serif;
-}   
-
-.header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1.5rem;
-}
-
-.profileIcon {
-  font-size: 2rem;
-  color: #2c3e50;
-  cursor: pointer;
 }
 
 .topBar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 1.5rem;
 }
 
 .filterIcon {
   font-size: 1.5rem;
-  cursor: pointer;
+  margin-right: 0.5rem;
+  vertical-align: middle;
 }
 
-.promoteButton {
+.promoteButton,
+.toggleButton {
   background-color: #2c3e50;
   color: white;
   border: none;
@@ -51,7 +41,8 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  
+  margin-right: 0.5rem;
+
   &:hover {
     background-color: darken(#2c3e50, 10%);
   }
@@ -64,21 +55,14 @@
   margin-bottom: 2rem;
 }
 
-.eventCard {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  
-  strong {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-  }
-  
-  p {
-    color: #666;
-    margin: 0;
+.cardWrapper {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -87,20 +71,31 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  
+
   button {
     background: #f0f0f0;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
-    
+
     &:hover {
       background: #ddd;
     }
   }
-  
+
   span {
     margin: 0 1rem;
   }
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: red;
 }

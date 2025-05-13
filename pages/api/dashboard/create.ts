@@ -1,5 +1,6 @@
+// pages/api/dashboard/create.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
+import admin from 'firebase-admin';
 import { firestore } from '../../../services/firebaseAdmin';
 import EventData from '../../../components/types/interfaceEventData';
 
@@ -9,20 +10,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const authHeader = req.headers.authorization;
-  if (!authHeader) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Token não fornecido.' });
   }
 
-  const token = authHeader.split(' ')[1];
-  let decoded: any;
+  const idToken = authHeader.split(' ')[1];
+  let decodedToken: admin.auth.DecodedIdToken;
 
   try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    decodedToken = await admin.auth().verifyIdToken(idToken);
   } catch (error) {
     return res.status(401).json({ error: 'Token inválido.' });
   }
 
-  const uid = decoded.uid;
+  const uid = decodedToken.uid;
 
   try {
     const userDoc = await firestore.collection('users').doc(uid).get();
