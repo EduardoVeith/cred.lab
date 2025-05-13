@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import CardEvento from '../components/Layout/CardEvento';
 import styles from '../styles/eventList.module.scss';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { FiFilter } from 'react-icons/fi';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import firebaseApp from '../services/firebase';
 import AuthGuard from '../components/Auth/AuthGuard';
 
@@ -63,12 +64,19 @@ export default function EventListPage() {
     paginaAtual * eventosPorPagina
   );
 
+  async function handleLogout() {
+    const auth = getAuth(firebaseApp);
+    await signOut(auth);
+    window.location.href = '/login';
+  }
+
   return (
     <AuthGuard>
       <div className={styles.dashboardContainer}>
         <div className={styles.barraTanc}>TANC</div>
         <div style={{ marginTop: '80px' }}>
           <div className={styles.topBar}>
+            <FiFilter className={styles.filterIcon} />
             <button
               className={styles.promoteButton}
               onClick={() => (window.location.href = '/eventRegister')}
@@ -76,10 +84,16 @@ export default function EventListPage() {
               Promover Evento
             </button>
             <button
-              className={styles.promoteButton}
+              className={styles.toggleButton}
               onClick={() => (window.location.href = '/events')}
             >
               Meus Eventos
+            </button>
+            <button
+              className={styles.promoteButton}
+              onClick={handleLogout}
+            >
+              Logout
             </button>
           </div>
 
