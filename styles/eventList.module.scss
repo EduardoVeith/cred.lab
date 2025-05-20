@@ -1,15 +1,17 @@
 .dashboardContainer {
   font-family: Arial, sans-serif;
   width: 100%;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
 .barraTanc {
   background-color: #1225f8;
   color: #ffffff;
-  padding: 10px 18px;
+  padding: 15px 25px;
   font-size: 40px;
   font-weight: 700;
   width: 100%;
@@ -20,10 +22,14 @@
 }
 
 .topBar {
-  display: flex;
-  justify-content: flex-start;
+  display: block;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .filterIcon {
@@ -32,61 +38,133 @@
   vertical-align: middle;
 }
 
-.promoteButton,
-.toggleButton {
-  background-color: #2c3e50;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-right: 0.5rem;
+.actionsGroup {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  background: white;
+
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.05);
+  
+  transition: box-shadow 0.3s ease;
 
   &:hover {
-    background-color: darken(#2c3e50, 10%);
+    box-shadow: 
+      0 2px 5px rgba(0, 0, 0, 0.08),
+      0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.actionButton {
+  background-color: #1225f8;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background-color: darken(#1225f8, 10%);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  svg {
+    font-size: 1.1rem;
+  }
+}
+
+.logoutButton {
+  background-color: #e53e3e;
+  
+  &:hover {
+    background-color: darken(#e53e3e, 10%);
   }
 }
 
 .eventsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
   margin-bottom: 2rem;
+  padding: 1rem 0;
 }
 
 .cardWrapper {
   text-decoration: none;
   color: inherit;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
 }
 
 .pagination {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 2rem;
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  z-index: 100;
 
   button {
-    background: #f0f0f0;
+    background: #edf2f7;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    min-width: 40px;
 
-    &:hover {
-      background: #ddd;
+    &:hover:not(:disabled) {
+      background: #e2e8f0;
+      transform: translateY(-1px);
     }
-  }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+  
 
   span {
-    margin: 0 1rem;
+    margin: 0;
+    font-weight: 500;
+    color: #555;
   }
+}
 }
 
 .loading,

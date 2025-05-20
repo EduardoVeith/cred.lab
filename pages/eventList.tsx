@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import CardEvento from '../components/Layout/CardEvento';
 import styles from '../styles/eventList.module.scss';
-import { FiFilter } from 'react-icons/fi';
+import { FiFilter, FiPlus, FiCalendar, FiLogOut } from 'react-icons/fi';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import firebaseApp from '../services/firebase';
 import AuthGuard from '../components/Auth/AuthGuard';
+
 
 interface Evento {
   id: string;
@@ -75,24 +76,27 @@ export default function EventListPage() {
       <div className={styles.dashboardContainer}>
         <div className={styles.barraTanc}>TANC</div>
         <div style={{ marginTop: '80px' }}>
-          <div className={styles.topBar}>
+          <div className={styles.actionsGroup}>
             <FiFilter className={styles.filterIcon} />
             <button
-              className={styles.promoteButton}
+              className={`${styles.actionButton} ${styles.primaryAction}`}
               onClick={() => (window.location.href = '/eventRegister')}
             >
+              <FiPlus />
               Promover Evento
             </button>
             <button
-              className={styles.toggleButton}
+              className={`${styles.actionButton} ${styles.primaryAction}`}
               onClick={() => (window.location.href = '/events')}
             >
+              <FiCalendar />
               Meus Eventos
             </button>
             <button
-              className={styles.promoteButton}
+              className={`${styles.actionButton} ${styles.logoutButton}`}
               onClick={handleLogout}
             >
+              <FiLogOut />
               Logout
             </button>
           </div>

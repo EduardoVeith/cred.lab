@@ -56,34 +56,33 @@ function EventDetailPage() {
     if (!eventData)
         return <div className={styles.container}>Nenhum evento encontrado.</div>
 
-    return (
+     return (
+  <>
+    <div className={styles.barra_tanc}>TANC</div>
+    <div className={styles.backButtonTop}>
+      <Link href="/eventList" className={styles.button}>
+        Voltar
+      </Link>
+    </div>
+
         <div className={styles.container}>
-            <div className={styles.barraTanc}>
-                <h1>{eventData.title}</h1>
-            </div>
-            <div className={styles.eventInfo}>
-                <h2 className={styles.eventName}>{eventData.title}</h2>
-                <div className={styles.eventDetails}>
-                    <p><strong>Descrição:</strong> {eventData.description}</p>
-                    <p><strong>Categoria:</strong> {eventData.category}</p>
-                    <p><strong>Início:</strong> {new Date(eventData.startDate).toLocaleString('pt-BR')}</p>
-                    <p><strong>Término:</strong> {new Date(eventData.endDate).toLocaleString('pt-BR')}</p>
-                </div>
-                {eventData.imageUrl && (
-                    <img
-                        src={eventData.imageUrl}
-                        alt={eventData.title}
-                        className={styles.eventImage}
-                    />
-                )}
-            </div>
-            <div className={styles.buttonGroup}>
-                <Link href="/eventList" className={styles.button}>
-                    Voltar para Lista
-                </Link>
-            </div>
-        </div>
-    )
+      <h2 className={styles.eventTitle}>{eventData.title}</h2>
+      <div className={styles.eventDetails}>
+        <p><strong>Descrição:</strong> {eventData.description}</p>
+        <p><strong>Categoria:</strong> {eventData.category}</p>
+        <p><strong>Início:</strong> {new Date(eventData.startDate).toLocaleString('pt-BR')}</p>
+        <p><strong>Término:</strong> {new Date(eventData.endDate).toLocaleString('pt-BR')}</p>
+      </div>
+      {eventData.imageUrl && (
+        <img 
+          src={eventData.imageUrl}
+          alt={eventData.title}
+          className={styles.eventImage}
+        />
+      )}
+    </div>
+  </>
+);
 }
 
 export default function ProtectedEventDetail() {
