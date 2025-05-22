@@ -1,0 +1,93 @@
+.header {
+  width: 100%;
+  background-color: #0033FF;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+.logo {
+  margin: 0;
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.container {
+  max-width: 480px;
+  margin: 24px auto;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.qrContainer {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 12px;
+}
+
+.helpText {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 8px;
+}
+
+.result {
+  margin-top: 16px;
+  font-size: 1rem;
+  min-height: 1.5em;
+}
+
+.success {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.failure {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.buttonReset {
+  margin-top: 20px;
+  background-color: #2563EB;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .container {
+    max-width: 360px;
+  }
+  .pageTitle {
+    font-size: 1.25rem;
+  }
+  .qrContainer {
+    max-width: 280px;
+  }
+}
+
+/* Celular */
+@media (max-width: 480px) {
+  .container {
+    margin: 16px auto;
+    padding: 0 12px;
+  }
+  .pageTitle {
+    font-size: 1.1rem;
+  }
+  .buttonReset {
+    width: auto; /* mantém tamanho do conteúdo */
+  }
+}
