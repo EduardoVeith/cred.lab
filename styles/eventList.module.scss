@@ -22,7 +22,7 @@
 }
 
 .topBar {
-  display: block;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
@@ -107,11 +107,6 @@
   text-decoration: none;
   color: inherit;
   transition: all 0.3s ease;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
 
   &:hover {
     transform: translateY(-5px);

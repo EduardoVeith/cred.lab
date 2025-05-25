@@ -5,8 +5,8 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseApp from '../services/firebase';
 import AuthGuard from '../components/Auth/AuthGuard';
 import CardEvento from '../components/Layout/CardEvento';
-import { FiFilter } from 'react-icons/fi';
-import styles from '../styles/eventList.module.scss';
+import { FiFilter, FiPlus, FiGrid } from 'react-icons/fi';
+import styles from '../styles/events.module.scss';
 
 interface Evento {
     id: string;
@@ -67,19 +67,25 @@ function EventsPage() {
                 <div className={styles.barraTanc}>TANC</div>
                 <div style={{ marginTop: '80px' }}>
                     <div className={styles.topBar}>
+                        <div>
                         <FiFilter className={styles.filterIcon} />
+                        </div>
+                        <div style={{ display: 'flex', gap: '1rem' }}>
                         <button
-                            className={styles.promoteButton}
-                            onClick={() => window.location.href = '/eventRegister'}
+                        className={`${styles.actionButton} ${styles.primaryAction}`}
+                        onClick={() => (window.location.href = '/eventRegister')}
                         >
-                            Promover Evento
+                        <FiPlus />
+                        Promover Evento
                         </button>
                         <button
-                            className={styles.toggleButton}
-                            onClick={() => window.location.href = '/eventList'}
+                        className={`${styles.actionButton} ${styles.primaryAction}`}
+                        onClick={() => (window.location.href = '/eventList')}
                         >
-                            Todos Eventos
+                        <FiGrid />
+                        Todos os Eventos
                         </button>
+                    </div>
                     </div>
 
                     <section className="mb-8">

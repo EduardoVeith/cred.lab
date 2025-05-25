@@ -76,29 +76,31 @@ export default function EventListPage() {
       <div className={styles.dashboardContainer}>
         <div className={styles.barraTanc}>TANC</div>
         <div style={{ marginTop: '80px' }}>
-          <div className={styles.actionsGroup}>
+          <div className={styles.topBar}>
             <FiFilter className={styles.filterIcon} />
-            <button
-              className={`${styles.actionButton} ${styles.primaryAction}`}
-              onClick={() => (window.location.href = '/eventRegister')}
-            >
-              <FiPlus />
-              Promover Evento
-            </button>
-            <button
-              className={`${styles.actionButton} ${styles.primaryAction}`}
-              onClick={() => (window.location.href = '/events')}
-            >
-              <FiCalendar />
-              Meus Eventos
-            </button>
-            <button
-              className={`${styles.actionButton} ${styles.logoutButton}`}
-              onClick={handleLogout}
-            >
-              <FiLogOut />
-              Logout
-            </button>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                className={`${styles.actionButton}`}
+                onClick={() => (window.location.href = '/eventRegister')}
+              >
+                <FiPlus />
+                Promover Evento
+              </button>
+              <button
+                className={`${styles.actionButton}`}
+                onClick={() => (window.location.href = '/events')}
+              >
+                <FiCalendar />
+                Meus Eventos
+              </button>
+              <button
+                className={`${styles.actionButton} ${styles.logoutButton}`}
+                onClick={handleLogout}
+              >
+                <FiLogOut />
+                Logout
+              </button>
+            </div>
           </div>
 
           {loading ? (
