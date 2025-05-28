@@ -1,3 +1,5 @@
+// styles/events.module.scss
+
 .dashboardContainer {
   font-family: Arial, sans-serif;
   width: 100%;
@@ -9,16 +11,16 @@
 }
 
 .barraTanc {
-  background-color: #1225f8;
-  color: #ffffff;
-  padding: 15px 25px;
-  font-size: 40px;
-  font-weight: 700;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  font-family: "Inter", sans-serif;
+    background-color: #1225f8;
+    color: #ffffff;
+    padding: 10px 18px;
+    font-size: 40px;
+    font-weight: 700;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-family: "Inter", sans-serif;
 }
 
 .topBar {
@@ -33,9 +35,30 @@
 }
 
 .filterIcon {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-  vertical-align: middle;
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.promoteButton,
+.toggleButton {
+    background-color: #1225f8;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+        background-color: darken(#2c3e50, 10%);
+        transform: translateY(-2px);
+    }
 }
 
 .actionsGroup {
@@ -87,14 +110,6 @@
   }
 }
 
-.logoutButton {
-  background-color: #e53e3e;
-  
-  &:hover {
-    background-color: darken(#e53e3e, 10%);
-  }
-}
-
 .eventsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -104,71 +119,46 @@
 }
 
 .cardWrapper {
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  }
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 }
 
 .pagination {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  padding: 2rem;
-  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 
-  button {
-    background: #edf2f7;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    min-width: 40px;
+    button {
+        background: #f0f0f0;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
 
-    &:hover:not(:disabled) {
-      background: #e2e8f0;
-      transform: translateY(-1px);
+        &:hover {
+            background: #ddd;
+        }
     }
 
-    &:active:not(:disabled) {
-      transform: translateY(0);
+    span {
+        margin: 0 1rem;
     }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-  
-
-  span {
-    margin: 0;
-    font-weight: 500;
-    color: #555;
-  }
-}
 }
 
 .loading,
 .error {
-  text-align: center;
-  padding: 1rem;
-  font-size: 1.2rem;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.2rem;
 }
 
 .error {
-  color: red;
+    color: red;
 }
