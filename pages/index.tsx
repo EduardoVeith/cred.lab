@@ -28,7 +28,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Restante do conteúdo permanece igual */}
+        {}
         <section className={styles.featuredEvents}>
           <h2>Eventos em Destaque</h2>
           <div className={styles.eventsGrid}>

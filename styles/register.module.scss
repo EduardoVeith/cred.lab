@@ -112,6 +112,31 @@
   }
 }
 
+.button-event-creator {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #1225f8;
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f0f2ff;
+  }
+
+  .button-login-text {
+    color: #1225f8;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 .spinner {
   border: 2px solid #fff;
   border-top: 2px solid transparent;
@@ -154,4 +179,50 @@
   font-size: 14px;
   margin-top: 10px;
   text-align: center;
+}
+.user-type-selector {
+  display: flex;
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+
+  .user-type-option {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-right: 1px solid #d9d9d9;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &.active {
+      background-color: #1225f8;
+      color: white;
+
+      .icon {
+        color: white;
+      }
+    }
+
+    .icon {
+      font-size: 20px;
+      margin-bottom: 5px;
+      color: #666;
+    }
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
 }

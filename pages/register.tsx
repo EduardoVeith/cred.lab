@@ -9,12 +9,15 @@ import {
   FiCreditCard,
   FiCalendar,
   FiMail,
+  FiUsers,
+  FiStar,
 } from 'react-icons/fi';
 import SuccessToast from '../components/Layout/SuccessToast';
 
 export default function Cadastro() {
   const router = useRouter();
   const [form, setForm] = useState({
+    userType: 'user', 
     name: '',
     email: '',
     password: '',
@@ -27,19 +30,19 @@ export default function Cadastro() {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // Impede acesso se já estiver logado
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) router.push('/eventList');
   }, [router]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     let maskedValue = value;
 
     if (name === 'cpf') {
-      maskedValue = value
-        .replace(/\D/g, '')
+      const numericValue = value.replace(/\D/g, '');
+      if (numericValue.length > 11) return;
+      maskedValue = numericValue
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -77,9 +80,17 @@ export default function Cadastro() {
     setLoading(true);
     setErrorMsg('');
 
+    const cleanCPF = form.cpf.replace(/\D/g, '');
+    if (cleanCPF.length !== 11) {
+      setErrorMsg('CPF deve ter exatamente 11 dígitos');
+      setLoading(false);
+      return;
+    }
+
     const cleanData = {
       ...form,
-      cpf: form.cpf.replace(/\D/g, ''),
+      userType: form.userType,
+      cpf: cleanCPF,
       phone: form.phone.replace(/\D/g, ''),
       birthDate: formatBirthDate(form.birthDate),
     };
@@ -118,6 +129,23 @@ export default function Cadastro() {
           <h2 className={styles['container-title']}>Criar uma conta</h2>
 
           <div className={styles['container-inputs']}>
+            <div className={styles['user-type-selector']}>
+              <div 
+                className={`${styles['user-type-option']} ${form.userType === 'user' ? styles.active : ''}`}
+                onClick={() => setForm({...form, userType: 'user'})}
+              >
+                <FiUsers className={styles.icon} />
+                <span>Usuário</span>
+              </div>
+              <div 
+                className={`${styles['user-type-option']} ${form.userType === 'creator' ? styles.active : ''}`}
+                onClick={() => setForm({...form, userType: 'creator'})}
+              >
+                <FiStar className={styles.icon} />
+                <span>Criador de Evento</span>
+              </div>
+            </div>
+
             <div className={styles['input-group']}>
               <input
                 name="name"
@@ -159,6 +187,7 @@ export default function Cadastro() {
                 placeholder="CPF"
                 value={form.cpf}
                 onChange={handleChange}
+                maxLength={14}
                 required
               />
               <FiCreditCard />
