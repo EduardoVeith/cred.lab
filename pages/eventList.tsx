@@ -1,13 +1,12 @@
-// pages/eventList.tsx
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import CardEvento from '../components/Layout/CardEvento';
 import styles from '../styles/eventList.module.scss';
-import { FiFilter, FiPlus, FiCalendar, FiLogOut } from 'react-icons/fi';
+import { FiFilter, FiPlus, FiCalendar, FiLogOut, FiX } from 'react-icons/fi';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import firebaseApp from '../services/firebase';
 import AuthGuard from '../components/Auth/AuthGuard';
-
 
 interface Evento {
   id: string;
@@ -22,8 +21,31 @@ export default function EventListPage() {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showFilter, setShowFilter] = useState(false);
+  const [filterTitle, setFilterTitle] = useState('');
+  const [filterLocation, setFilterLocation] = useState('');
 
   const eventosPorPagina = 12;
+
+  const eventosFiltradosOrdenados = useMemo(() => {
+    let filtered = [...eventos];
+    
+    if (filterTitle) {
+      filtered = filtered.filter(evt => 
+        evt.title.toLowerCase().includes(filterTitle.toLowerCase())
+      );
+    }
+    
+    if (filterLocation) {
+      filtered = filtered.filter(evt => 
+        evt.locationName.toLowerCase().includes(filterLocation.toLowerCase())
+      );
+    }
+    
+    return filtered.sort((a, b) => {
+      return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+    });
+  }, [eventos, filterTitle, filterLocation]);
 
   useEffect(() => {
     const auth = getAuth(firebaseApp);
@@ -44,7 +66,7 @@ export default function EventListPage() {
         const lista = data.map(evt => ({
           id: evt.id,
           title: evt.title,
-          locationName: evt.address?.locationName ?? 'indisponível',
+          locationName: evt.address?.locationName ?? 'Indisponível',
           startDate: evt.startDate,
           endDate: evt.endDate,
         }));
@@ -59,11 +81,17 @@ export default function EventListPage() {
     return () => unsubscribe();
   }, []);
 
-  const totalPaginas = Math.ceil(eventos.length / eventosPorPagina);
-  const eventosPaginados = eventos.slice(
+  const totalPaginas = Math.ceil(eventosFiltradosOrdenados.length / eventosPorPagina);
+  const eventosPaginados = eventosFiltradosOrdenados.slice(
     (paginaAtual - 1) * eventosPorPagina,
     paginaAtual * eventosPorPagina
   );
+
+  function resetFilters() {
+    setFilterTitle('');
+    setFilterLocation('');
+    setPaginaAtual(1);
+  }
 
   async function handleLogout() {
     const auth = getAuth(firebaseApp);
@@ -75,10 +103,57 @@ export default function EventListPage() {
     <AuthGuard>
       <div className={styles.dashboardContainer}>
         <div className={styles.barraTanc}>TANC</div>
-        <div style={{ marginTop: '80px' }}>
+        <div className={styles.contentWrapper}>
           <div className={styles.topBar}>
-            <FiFilter className={styles.filterIcon} />
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className={styles.filterContainer}>
+              <button 
+                className={styles.filterButton}
+                onClick={() => setShowFilter(!showFilter)}
+              >
+                <FiFilter className={styles.filterIcon} />
+                Filtros
+              </button>
+              {showFilter && (
+                <div className={styles.filterDropdown}>
+                  <div className={styles.filterHeader}>
+                    <h4>Filtrar Eventos</h4>
+                    <button 
+                      onClick={() => setShowFilter(false)}
+                      className={styles.closeButton}
+                    >
+                      <FiX />
+                    </button>
+                  </div>
+                  <div className={styles.filterGroup}>
+                    <label>Título:</label>
+                    <input
+                      type="text"
+                      value={filterTitle}
+                      onChange={(e) => setFilterTitle(e.target.value)}
+                      placeholder="Filtrar por título"
+                    />
+                  </div>
+                  <div className={styles.filterGroup}>
+                    <label>Local:</label>
+                    <input
+                      type="text"
+                      value={filterLocation}
+                      onChange={(e) => setFilterLocation(e.target.value)}
+                      placeholder="Filtrar por local"
+                    />
+                  </div>
+                  <div className={styles.filterActions}>
+                    <button 
+                      onClick={resetFilters}
+                      className={styles.resetButton}
+                    >
+                      Limpar Filtros
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className={styles.buttonsGroup}>
               <button
                 className={`${styles.actionButton}`}
                 onClick={() => (window.location.href = '/eventRegister')}
@@ -110,34 +185,54 @@ export default function EventListPage() {
           ) : (
             <>
               <div className={styles.eventsGrid}>
-                {eventosPaginados.map(evt => (
-                  <Link
-                    key={evt.id}
-                    href={`/eventDetail?id=${evt.id}`}
-                    className={styles.cardWrapper}
-                  >
-                    <CardEvento
-                      nome={evt.title}
-                      endereco={evt.locationName}
-                      dataHora={evt.startDate}
-                    />
-                  </Link>
-                ))}
+                {eventosPaginados.length > 0 ? (
+                  eventosPaginados.map(evt => (
+                    <Link
+                      key={evt.id}
+                      href={`/eventDetail?id=${evt.id}`}
+                      className={styles.cardWrapper}
+                    >
+                      <CardEvento
+                        nome={evt.title}
+                        endereco={evt.locationName}
+                        dataHora={evt.startDate}
+                      />
+                    </Link>
+                  ))
+                ) : (
+                  <div className={styles.noResults}>
+                    Nenhum evento encontrado com os filtros atuais.
+                  </div>
+                )}
               </div>
               <div className={styles.pagination}>
-                <button onClick={() => setPaginaAtual(1)} disabled={paginaAtual === 1}>{'<<'}</button>
+                <button 
+                  onClick={() => setPaginaAtual(1)} 
+                  disabled={paginaAtual === 1}
+                >
+                  {'<<'}
+                </button>
                 <button
                   onClick={() => setPaginaAtual(prev => Math.max(prev - 1, 1))}
                   disabled={paginaAtual === 1}
-                >{'<'}</button>
+                >
+                  {'<'}
+                </button>
                 <span>
                   Página {paginaAtual} de {totalPaginas}
                 </span>
                 <button
                   onClick={() => setPaginaAtual(prev => Math.min(prev + 1, totalPaginas))}
                   disabled={paginaAtual === totalPaginas}
-                >{'>'}</button>
-                <button onClick={() => setPaginaAtual(totalPaginas)} disabled={paginaAtual === totalPaginas}>{'>>'}</button>
+                >
+                  {'>'}
+                </button>
+                <button 
+                  onClick={() => setPaginaAtual(totalPaginas)} 
+                  disabled={paginaAtual === totalPaginas}
+                >
+                  {'>>'}
+                </button>
               </div>
             </>
           )}

@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+
+$primary-color: #1225f8;
+$secondary-color: #6c757d;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+
 .barra_tanc {
-  background-color: #1225f8;
+  background-color: $primary-color;
   color: #ffffff;
   padding: 10px 18px;
   font-size: 40px;
@@ -11,92 +17,149 @@
   top: 0;
   left: 0;
   font-family: "Inter", sans-serif;
+  z-index: 1000;
 }
 
 .container {
-  max-width: 1700px;
+  max-width: 800px;
   margin: 140px auto 40px;
-  padding: 20px;
+  padding: 30px;
   font-family: "Inter", sans-serif;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  position: relative;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.eventInfo {
-  margin-top: 20px;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.eventCard {
+  background: $light-color;
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+}
 
-  h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
-    font-weight: 600;
+.eventSection {
+  padding: 25px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  
+  &:last-child {
+    border-bottom: none;
   }
+}
 
-  .eventName {
-    font-style: italic;
-    color: #555;
-    margin-bottom: 10px;
-    font-size: 18px;
+.sectionTitle {
+  font-size: 20px;
+  color: $primary-color;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.icon {
+  margin-right: 10px;
+  color: $primary-color;
+}
+
+.detailItem {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  
+  .icon {
+    margin-top: 3px;
   }
+}
 
-  .eventDetails {
-    p {
-      margin: 8px 0;
-      color: #666;
-      font-size: 16px;
+.detailLabel {
+  font-weight: 600;
+  color: $dark-color;
+  margin-bottom: 5px;
+}
 
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-  }
+.detailValue {
+  color: $secondary-color;
+  margin: 0;
+}
+
+.eventDescription {
+  line-height: 1.8;
+  color: $secondary-color;
+  margin: 0;
+}
+
+.eventTitle {
+  font-size: 28px;
+  color: $primary-color;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .backButtonTop {
   position: fixed;
-  top: 90px; 
+  top: 90px;
   right: 70px;
-  z-index: 100;
-  }
+  z-index: 1000;
+}
 
 .button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-family: "Inter", sans-serif;
-  background-color: #1225f8;
+  background-color: $primary-color;
   color: white;
   text-decoration: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+  
   &:hover {
-    background-color: #0e1ecf;
-    transform: translateY(-2px);
+    background-color: darken($primary-color, 8%);
   }
 }
 
-// /*  */
-// .credenciados {
-//   /* ... */
-// }
+.loadingSpinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid $primary-color;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
 
-// .footer {
-//   /* ... */
-// }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-.eventImage {
-  width: 100%;
-  border-radius: 4px;
-  margin-top: 1rem;
-  object-fit: cover;
+.loadingText {
+  text-align: center;
+  color: $primary-color;
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.errorMessage {
+  text-align: center;
+  padding: 25px;
+  background-color: #fff0f0;
+  border-radius: 8px;
+  border: 1px solid #ffd6d6;
+}
+
+.errorText {
+  color: #dc3545;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.notFoundText {
+  text-align: center;
+  font-size: 18px;
+  color: $secondary-color;
+  margin-bottom: 20px;
 }

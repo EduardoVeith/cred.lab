@@ -1,11 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+$max-container-width: 1400px;
+$card-min-width: 300px;
+$card-max-width: 350px;
+$grid-gap: 20px;
+
 .dashboardContainer {
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   width: 100%;
-  max-width: 1800px;
+  max-width: $max-container-width;
   margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
   min-height: 100vh;
+  position: relative;
+}
+
+.contentWrapper {
+  margin-top: 80px;
+  padding-bottom: 80px; // Espaço para a paginação
 }
 
 .barraTanc {
@@ -19,44 +32,138 @@
   top: 0;
   left: 0;
   font-family: "Inter", sans-serif;
+  z-index: 1000;
 }
 
 .topBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   padding: 1rem;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 80px;
+  z-index: 900;
+}
+
+.filterContainer {
+  position: relative;
+}
+
+.filterButton {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1225f8;
+  background-color: #f0f2ff;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #e0e5ff;
+  }
 }
 
 .filterIcon {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-  vertical-align: middle;
+  font-size: 1.2rem;
 }
 
-.actionsGroup {
-  display: flex;
-  gap: 1.5rem;
-  padding: 1rem;
-  margin-top: 0.5rem;
-  border-radius: 8px;
+.filterDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
   background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  width: 300px;
+  margin-top: 0.5rem;
+}
 
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    0 2px 6px rgba(0, 0, 0, 0.05);
-  
-  transition: box-shadow 0.3s ease;
+.filterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 1.2rem;
+  padding: 0.2rem;
 
   &:hover {
-    box-shadow: 
-      0 2px 5px rgba(0, 0, 0, 0.08),
-      0 4px 10px rgba(0, 0, 0, 0.08);
+    color: #333;
   }
+}
+
+.filterGroup {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+
+    &:focus {
+      outline: none;
+      border-color: #1225f8;
+      box-shadow: 0 0 0 2px rgba(18, 37, 248, 0.1);
+    }
+  }
+}
+
+.filterActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.resetButton {
+  background: #f0f0f0;
+  color: #555;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e0e0e0;
+  }
+}
+
+.buttonsGroup {
+  display: flex;
+  gap: 1rem;
 }
 
 .actionButton {
@@ -72,10 +179,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
 
   &:hover {
     background-color: darken(#1225f8, 10%);
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   &:active {
@@ -97,8 +206,9 @@
 
 .eventsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax($card-min-width, $card-max-width));
+  justify-content: center;
+  gap: $grid-gap;
   margin-bottom: 2rem;
   padding: 1rem 0;
 }
@@ -107,6 +217,7 @@
   text-decoration: none;
   color: inherit;
   transition: all 0.3s ease;
+  height: 100%;
 
   &:hover {
     transform: translateY(-5px);
@@ -120,13 +231,13 @@
   left: 0;
   right: 0;
   background: white;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  z-index: 100;
+  z-index: 1000;
 
   button {
     background: #edf2f7;
@@ -152,23 +263,55 @@
       cursor: not-allowed;
       transform: none;
     }
-  
+  }
 
   span {
-    margin: 0;
+    margin: 0 10px;
     font-weight: 500;
     color: #555;
   }
 }
-}
 
 .loading,
-.error {
+.error,
+.noResults {
   text-align: center;
-  padding: 1rem;
+  padding: 2rem;
   font-size: 1.2rem;
+  color: #555;
+  grid-column: 1 / -1;
 }
 
 .error {
-  color: red;
+  color: #e53e3e;
+}
+
+
+@media (max-width: 768px) {
+  .topBar {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .buttonsGroup {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .actionButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .filterDropdown {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .eventsGrid {
+    grid-template-columns: 1fr;
+  }
 }

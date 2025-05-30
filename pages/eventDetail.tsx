@@ -5,13 +5,12 @@ import firebaseApp from '../services/firebase'
 import AuthGuard from '../components/Auth/AuthGuard'
 import Link from 'next/link'
 import styles from '../styles/eventDetail.module.scss'
+import { FiCalendar, FiClock, FiInfo } from 'react-icons/fi'
 
 interface EventDetail {
     id: string
     title: string
     description: string
-    category: string
-    imageUrl?: string
     startDate: string
     endDate: string
 }
@@ -25,64 +24,142 @@ function EventDetailPage() {
 
     useEffect(() => {
         if (!id) return
-            ; (async () => {
-                setLoading(true)
-                try {
-                    const auth = getAuth(firebaseApp)
-                    const user = auth.currentUser
-                    if (!user) throw new Error('Usuário não autenticado')
-                    const token = await user.getIdToken()
-                    const resp = await fetch(
-                        `/api/dashboard/eventDetail?id=${id}`,
-                        { headers: { Authorization: `Bearer ${token}` } }
-                    )
-                    if (!resp.ok) {
-                        if (resp.status === 404) return replace('/404')
-                        throw new Error(await resp.text())
-                    }
-                    setEventData(await resp.json())
-                } catch (e: any) {
-                    setError(e.message)
-                } finally {
-                    setLoading(false)
+
+        const fetchEventData = async () => {
+            setLoading(true)
+            setError('')
+            try {
+                const auth = getAuth(firebaseApp)
+                const user = auth.currentUser
+                
+                if (!user) {
+                    replace('/login')
+                    return
                 }
-            })()
+
+                const token = await user.getIdToken()
+                const response = await fetch(
+                    `/api/dashboard/eventDetail?id=${id}`,
+                    { 
+                        headers: { 
+                            Authorization: `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        } 
+                    }
+                )
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        replace('/404')
+                        return
+                    }
+                    throw new Error(await response.text() || 'Falha ao carregar dados do evento')
+                }
+
+                const data: EventDetail = await response.json()
+                setEventData(data)
+            } catch (error: unknown) {
+                setError(error instanceof Error ? error.message : 'Ocorreu um erro desconhecido')
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchEventData()
     }, [id, replace])
 
-    if (loading)
-        return <div className={styles.container}>Carregando…</div>
-    if (error)
-        return <div className={styles.container}>Erro: {error}</div>
-    if (!eventData)
-        return <div className={styles.container}>Nenhum evento encontrado.</div>
+    const formatDate = (dateString: string) => {
+        const options: Intl.DateTimeFormatOptions = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        }
+        return new Date(dateString).toLocaleString('pt-BR', options)
+    }
 
-     return (
-  <>
-    <div className={styles.barra_tanc}>TANC</div>
-    <div className={styles.backButtonTop}>
-      <Link href="/eventList" className={styles.button}>
-        Voltar
-      </Link>
-    </div>
+    if (loading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.loadingSpinner}></div>
+                <p className={styles.loadingText}>Carregando detalhes do evento...</p>
+            </div>
+        )
+    }
 
-        <div className={styles.container}>
-      <h2 className={styles.eventTitle}>{eventData.title}</h2>
-      <div className={styles.eventDetails}>
-        <p><strong>Descrição:</strong> {eventData.description}</p>
-        <p><strong>Categoria:</strong> {eventData.category}</p>
-        <p><strong>Início:</strong> {new Date(eventData.startDate).toLocaleString('pt-BR')}</p>
-        <p><strong>Término:</strong> {new Date(eventData.endDate).toLocaleString('pt-BR')}</p>
-      </div>
-      {eventData.imageUrl && (
-        <img 
-          src={eventData.imageUrl}
-          alt={eventData.title}
-          className={styles.eventImage}
-        />
-      )}
-    </div>
-  </>
-);
+    if (error) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.errorMessage}>
+                    <p className={styles.errorText}>Erro ao carregar evento</p>
+                    <p>{error}</p>
+                    <button 
+                        onClick={() => window.location.reload()} 
+                        className={styles.button}
+                    >
+                        Tentar novamente
+                    </button>
+                    <Link href="/eventList" className={styles.secondaryButton}>
+                        Voltar para lista
+                    </Link>
+                </div>
+            </div>
+        )
+    }
+
+    if (!eventData) {
+        return (
+            <div className={styles.container}>
+                <p className={styles.notFoundText}>Nenhum evento encontrado.</p>
+                <Link href="/eventList" className={styles.button}>
+                    Voltar para a lista de eventos
+                </Link>
+            </div>
+        )
+    }
+
+    return (
+        <>
+            <header className={styles.barra_tanc}>TANC</header>
+            <div className={styles.backButtonTop}>
+                <Link href="/eventList" className={styles.button}>
+                    Voltar
+                </Link>
+            </div>
+
+            <main className={styles.container}>
+                <h1 className={styles.eventTitle}>{eventData.title}</h1>
+                
+                <div className={styles.eventCard}>
+                    <section className={styles.eventSection}>
+                        <h2 className={styles.sectionTitle}>
+                            <FiCalendar size={20} className={styles.icon} />
+                            Detalhes do Evento
+                        </h2>
+                        <div className={styles.detailItem}>
+                            <FiClock size={18} className={styles.icon} />
+                            <div>
+                                <p className={styles.detailLabel}>Período:</p>
+                                <p className={styles.detailValue}>
+                                    {formatDate(eventData.startDate)}
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className={styles.eventSection}>
+                        <h2 className={styles.sectionTitle}>
+                            <FiInfo size={20} className={styles.icon} />
+                            Sobre o Evento
+                        </h2>
+                        <p className={styles.eventDescription}>{eventData.description}</p>
+                    </section>
+                </div>
+            </main>
+        </>
+    )
 }
 
 export default function ProtectedEventDetail() {
