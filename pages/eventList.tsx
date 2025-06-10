@@ -1,9 +1,8 @@
-
 import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import CardEvento from '../components/Layout/CardEvento';
 import styles from '../styles/eventList.module.scss';
-import { FiFilter, FiPlus, FiCalendar, FiLogOut, FiX } from 'react-icons/fi';
+import { FiFilter, FiPlus, FiCalendar, FiLogOut, FiX, FiClock } from 'react-icons/fi';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import firebaseApp from '../services/firebase';
 import AuthGuard from '../components/Auth/AuthGuard';
@@ -24,11 +23,24 @@ export default function EventListPage() {
   const [showFilter, setShowFilter] = useState(false);
   const [filterTitle, setFilterTitle] = useState('');
   const [filterLocation, setFilterLocation] = useState('');
+  const [showPastEvents, setShowPastEvents] = useState(false);
 
   const eventosPorPagina = 12;
 
+  const isEventPast = (eventDate: string) => {
+    const now = new Date();
+    const eventDateObj = new Date(eventDate);
+    return eventDateObj < now;
+  };
+
   const eventosFiltradosOrdenados = useMemo(() => {
     let filtered = [...eventos];
+    
+    if (!showPastEvents) {
+      filtered = filtered.filter(evt => new Date(evt.endDate) >= new Date());
+    } else {
+      filtered = filtered.filter(evt => isEventPast(evt.endDate));
+    }
     
     if (filterTitle) {
       filtered = filtered.filter(evt => 
@@ -45,7 +57,7 @@ export default function EventListPage() {
     return filtered.sort((a, b) => {
       return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
     });
-  }, [eventos, filterTitle, filterLocation]);
+  }, [eventos, filterTitle, filterLocation, showPastEvents]);
 
   useEffect(() => {
     const auth = getAuth(firebaseApp);
@@ -90,6 +102,7 @@ export default function EventListPage() {
   function resetFilters() {
     setFilterTitle('');
     setFilterLocation('');
+    setShowPastEvents(false);
     setPaginaAtual(1);
   }
 
@@ -143,6 +156,13 @@ export default function EventListPage() {
                     />
                   </div>
                   <div className={styles.filterActions}>
+                    <button
+                      onClick={() => setShowPastEvents(!showPastEvents)}
+                      className={`${styles.showPastButton} ${showPastEvents ? styles.active : ''}`}
+                    >
+                      <FiClock />
+                      {showPastEvents ? 'Ocultar Passados' : 'Mostrar Passados'}
+                    </button>
                     <button 
                       onClick={resetFilters}
                       className={styles.resetButton}
@@ -196,6 +216,7 @@ export default function EventListPage() {
                         nome={evt.title}
                         endereco={evt.locationName}
                         dataHora={evt.startDate}
+                        isPast={isEventPast(evt.endDate)}
                       />
                     </Link>
                   ))
