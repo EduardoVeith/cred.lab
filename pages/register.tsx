@@ -89,7 +89,7 @@ export default function Cadastro() {
 
     const cleanData = {
       ...form,
-      userType: form.userType,
+      role: form.userType,
       cpf: cleanCPF,
       phone: form.phone.replace(/\D/g, ''),
       birthDate: formatBirthDate(form.birthDate),

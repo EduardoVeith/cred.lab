@@ -8,10 +8,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  const { name, email, password, phone, cpf, birthDate } = req.body;
+  const { name, email, password, phone, cpf, birthDate, role } = req.body;
 
   // 🔍 Log dos dados recebidos antes da validação
-  console.log('[DEBUG] Campos recebidos:', { name, email, password, phone, cpf, birthDate });
+  console.log('[DEBUG] Campos recebidos:', { name, email, password, phone, cpf, birthDate, role });
 
   if (!name || !email || !password || !phone || !cpf || !birthDate) {
     return res.status(400).json({ error: 'Preencha todos os campos obrigatórios' });
@@ -25,6 +25,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!emailRegex.test(email)) {
     return res.status(400).json({ error: 'Formato de e-mail inválido.' });
+  }
+  let userRole: 'usuario' | 'produtor';
+
+  if (role === 'user') {
+    userRole = 'usuario';
+  } else if (role === 'creator') {
+    userRole = 'produtor';
+  } else {
+    return res.status(400).json({ error: 'Tipo de usuário inválido. Escolha "creator" ou "user".' });
   }
   if (!cpfRegex.test(cpf)) {
     return res.status(400).json({ error: 'Informe apenas números no CPF.' });
@@ -79,6 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       phone,
       cpf,
       birthDate,
+      role: userRole,
       createdAt: new Date().toISOString(),
     });
 
