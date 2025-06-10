@@ -3,6 +3,16 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseApp from '../services/firebase';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  DocumentData,
+} from 'firebase/firestore'
+import { auth, db } from '../services/firebase'
 import AuthGuard from '../components/Auth/AuthGuard';
 import CardEvento from '../components/Layout/CardEvento';
 import { FiFilter, FiPlus, FiGrid } from 'react-icons/fi';
@@ -10,6 +20,7 @@ import styles from '../styles/events.module.scss';
 
 interface Evento {
     id: string;
+    ticketId?: string;
     title: string;
     address?: { locationName: string };
     startDate: string;
@@ -27,36 +38,68 @@ function EventsPage() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const auth = getAuth(firebaseApp);
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (!user) return; // espera usuário autenticado
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            setCreatedEvents([]);
+            setParticipatingEvents([]);
+            setLoading(false);
+            return;
+        }
 
-            setLoading(true);
-            setError(null);
+        try {
+            const idToken = await user.getIdToken();
+            const res = await fetch('/api/dashboard/events', {
+            headers: {
+                Authorization: `Bearer ${idToken}`,
+            },
+            });
+            if (!res.ok) throw new Error('Erro ao buscar eventos criados');
+            const data = await res.json();
+            setCreatedEvents(data.createdEvents);
 
-            try {
-                const token = await user.getIdToken();
-                const res = await fetch('/api/dashboard/events', {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                if (!res.ok) {
-                    let msg = 'Erro ao buscar eventos.';
-                    try { msg = (await res.json()).error; } catch { }
-                    throw new Error(msg);
-                }
+            const snap = await getDocs(
+                query(collection(db, 'tickets'), where('userId', '==', user.uid))
+            );
 
-                const data: ApiResponse = await res.json();
-                setCreatedEvents(data.createdEvents || []);
-                setParticipatingEvents(data.participatingEvents || []);
-            } catch (err) {
-                setError((err as Error).message);
-            } finally {
-                setLoading(false);
-            }
-        });
+            const rawTickets = snap.docs.map((doc) => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    eventId: data.eventId,
+                    qrSvg: data.qrSvg,
+                };
+            });
 
-        return () => unsubscribe();
-    }, []);
+            const enrichedEvents = await Promise.all(
+                rawTickets.map(async (ticket) => {
+                    const eventSnap = await getDoc(doc(db, 'events', ticket.eventId));
+                    const eventData = eventSnap.exists() ? eventSnap.data() : {};
+
+                    return {
+                        id: ticket.eventId,
+                        ticketId: ticket.id,
+                        title: eventData.title || 'Evento sem título',
+                        address: {
+                            locationName: eventData.address?.street || 'Endereço não disponível',
+                        },
+                        startDate: eventData.startDate || 'Data não disponível',
+                    };
+                })
+            );
+
+            setParticipatingEvents(enrichedEvents);
+        } catch (err) {
+            console.error(err);
+            setError('Erro ao carregar eventos.');
+        } finally {
+            setLoading(false);
+        }
+    });
+
+    return () => unsubscribe();
+}, []);
+
+
 
     if (loading) return <div className={styles.loading}>Carregando eventos...</div>;
     if (error) return <div className={styles.error}>{error}</div>;
@@ -68,7 +111,6 @@ function EventsPage() {
                 <div style={{ marginTop: '80px' }}>
                     <div className={styles.topBar}>
                         <div>
-                        <FiFilter className={styles.filterIcon} />
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                         <button
@@ -117,9 +159,9 @@ function EventsPage() {
                             {participatingEvents.length > 0 ? (
                                 participatingEvents.map(evt => (
                                     <Link
-                                        key={evt.id}
-                                        href={`/eventDetail?id=${evt.id}`}
-                                        className={styles.cardWrapper}
+                                    key={evt.ticketId}
+                                    href={`/tickets/${evt.ticketId}`}
+                                    className={styles.cardWrapper}
                                     >
                                         <CardEvento
                                             nome={evt.title}
