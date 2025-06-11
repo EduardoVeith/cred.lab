@@ -163,3 +163,57 @@ $dark-color: #343a40;
   color: $secondary-color;
   margin-bottom: 20px;
 }
+
+.linkedUsersList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linkedUserItem {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 15px;
+  color: #333;
+  line-height: 1.5;
+
+  p {
+    margin: 5px 0;
+  }
+}
+
+.linkForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input {
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: "Inter", sans-serif;
+  flex: 1 1 250px;
+  min-width: 250px;
+  transition: border 0.3s ease;
+
+  &:focus {
+    border-color: $primary-color;
+    outline: none;
+  }
+}
+
+.linkMessage {
+  font-size: 14px;
+  font-weight: 500;
+  color: green;
+  margin-top: 10px;
+}
