@@ -35,25 +35,25 @@ export default function EventListPage() {
 
   const eventosFiltradosOrdenados = useMemo(() => {
     let filtered = [...eventos];
-    
+
     if (!showPastEvents) {
       filtered = filtered.filter(evt => new Date(evt.endDate) >= new Date());
     } else {
       filtered = filtered.filter(evt => isEventPast(evt.endDate));
     }
-    
+
     if (filterTitle) {
-      filtered = filtered.filter(evt => 
+      filtered = filtered.filter(evt =>
         evt.title.toLowerCase().includes(filterTitle.toLowerCase())
       );
     }
-    
+
     if (filterLocation) {
-      filtered = filtered.filter(evt => 
+      filtered = filtered.filter(evt =>
         evt.locationName.toLowerCase().includes(filterLocation.toLowerCase())
       );
     }
-    
+
     return filtered.sort((a, b) => {
       return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
     });
@@ -119,7 +119,7 @@ export default function EventListPage() {
         <div className={styles.contentWrapper}>
           <div className={styles.topBar}>
             <div className={styles.filterContainer}>
-              <button 
+              <button
                 className={styles.filterButton}
                 onClick={() => setShowFilter(!showFilter)}
               >
@@ -130,7 +130,7 @@ export default function EventListPage() {
                 <div className={styles.filterDropdown}>
                   <div className={styles.filterHeader}>
                     <h4>Filtrar Eventos</h4>
-                    <button 
+                    <button
                       onClick={() => setShowFilter(false)}
                       className={styles.closeButton}
                     >
@@ -163,7 +163,7 @@ export default function EventListPage() {
                       <FiClock />
                       {showPastEvents ? 'Ocultar Passados' : 'Mostrar Passados'}
                     </button>
-                    <button 
+                    <button
                       onClick={resetFilters}
                       className={styles.resetButton}
                     >
@@ -227,8 +227,8 @@ export default function EventListPage() {
                 )}
               </div>
               <div className={styles.pagination}>
-                <button 
-                  onClick={() => setPaginaAtual(1)} 
+                <button
+                  onClick={() => setPaginaAtual(1)}
                   disabled={paginaAtual === 1}
                 >
                   {'<<'}
@@ -248,8 +248,8 @@ export default function EventListPage() {
                 >
                   {'>'}
                 </button>
-                <button 
-                  onClick={() => setPaginaAtual(totalPaginas)} 
+                <button
+                  onClick={() => setPaginaAtual(totalPaginas)}
                   disabled={paginaAtual === totalPaginas}
                 >
                   {'>>'}

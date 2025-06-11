@@ -5,6 +5,7 @@ interface CardEventoProps {
   nome: string;
   endereco: string;
   dataHora: string;
+  isPast: boolean
 }
 
 export default function CardEvento({ nome, endereco, dataHora }: CardEventoProps) {
