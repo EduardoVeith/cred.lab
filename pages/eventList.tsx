@@ -216,7 +216,7 @@ export default function EventListPage() {
                         nome={evt.title}
                         endereco={evt.locationName}
                         dataHora={evt.startDate}
-                        isPast={isEventPast(evt.endDate)}
+                        
                       />
                     </Link>
                   ))
