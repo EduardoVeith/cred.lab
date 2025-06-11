@@ -21,16 +21,52 @@ export default async function handler(
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Only POST allowed' })
   }
+  // 1.1) valida autenticação do criador, para que nenhum outro usuário possa criar ingressos
+  const authHeader = req.headers.authorization
+  const token = authHeader?.split('Bearer ')[1]
+
+  if (!token) {
+  return res.status(401).json({ error: 'Não autenticado' })
+  }
+
+  let currentUserId: string
+  try {
+  const decodedToken = await admin.auth().verifyIdToken(token)
+  currentUserId = decodedToken.uid
+  } catch (err) {
+  return res.status(401).json({ error: 'Token inválido' })
+  }
+
 
   // 2) Valida parâmetros
-  const { userId, eventId } = req.body as {
-    userId?: string
-    eventId?: string
+  const { userEmail, eventId } = req.body as {
+  userEmail?: string
+  eventId?: string
+}
+
+  if (!userEmail || !eventId) {
+  return res.status(400).json({ error: 'userEmail e eventId são obrigatórios' })
+}
+  const userSnapshot = await admin.auth().getUserByEmail(userEmail).catch(() => null)
+
+  if (!userSnapshot) {
+    return res.status(404).json({ error: 'Usuário não encontrado' })
   }
-  if (!userId || !eventId) {
-    return res
-      .status(400)
-      .json({ error: 'userId e eventId são obrigatórios' })
+
+  const userId = userSnapshot.uid
+
+  // 2.1)busca o evento e verifica se o usuário atual é o criador
+  const eventRef = firestore.collection('events').doc(eventId)
+  const eventSnap = await eventRef.get()
+
+  if (!eventSnap.exists) {
+    return res.status(404).json({ error: 'Evento não encontrado' })
+  }
+
+  const eventData = eventSnap.data()
+
+  if (eventData?.organizerId !== currentUserId) {
+    return res.status(403).json({ error: 'Você não tem permissão para adicionar ingressos a este evento' })
   }
 
   try {
