@@ -3,6 +3,7 @@ import { auth } from '../../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import jwt from 'jsonwebtoken';
 
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     console.warn(`[${new Date().toISOString()}] Método inválido usado: ${req.method}`);
